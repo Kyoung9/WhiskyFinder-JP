@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WhiskyFinder JP</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>WhiskyFinder JP</h1>
+      <p class="subtitle">Search whisky prices across JP stores.</p>
+
+      <form id="search-form" class="search-form">
+        <input
+          type="text"
+          name="q"
+          placeholder="例: アードベック10年"
+          autocomplete="off"
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="toolbar">
+        <span id="status" class="status">Ready.</span>
+        <a id="download" class="download hidden" href="#">Download CSV</a>
+      </div>
+
+      <table id="results" class="results">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Source</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </main>
+
+    <script>
+      const form = document.getElementById("search-form");
+      const statusEl = document.getElementById("status");
+      const tbody = document.querySelector("#results tbody");
+      const downloadEl = document.getElementById("download");
+      const params = new URLSearchParams(window.location.search);
+      const error = params.get("error");
+      if (error) {
+        alert(error);
+        params.delete("error");
+        const next = `${window.location.pathname}?${params.toString()}`.replace(/\?$/, "");
+        window.history.replaceState({}, "", next);
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const query = form.elements.q.value.trim();
+        if (!query) {
+          statusEl.textContent = "Enter a keyword.";
+          return;
+        }
+
+        statusEl.textContent = "Searching...";
+        downloadEl.classList.add("hidden");
+        downloadEl.href = "#";
+        tbody.innerHTML = "";
+
+        try {
+          form.querySelector("button[type='submit']").disabled = true;
+          const response = await fetch(`/search?q=${encodeURIComponent(query)}`);
+          const data = await response.json();
+          const results = data.results || [];
+
+          results.forEach((item) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td class="title"><a href="${item.url}" target="_blank" rel="noreferrer">${item.title}</a></td>
+              <td>${item.price}</td>
+              <td>${item.source}</td>
+              <td>${item.total}</td>
+            `;
+            tbody.appendChild(row);
+          });
+
+          statusEl.textContent = `${results.length} results.`;
+          downloadEl.href = `/download?q=${encodeURIComponent(query)}`;
+          downloadEl.classList.remove("hidden");
+        } catch (error) {
+          statusEl.textContent = "Failed to fetch results.";
+        } finally {
+          form.querySelector("button[type='submit']").disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
