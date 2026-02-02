@@ -1,6 +1,6 @@
 import re
 from typing import Optional
-from urllib.parse import quote, urljoin
+from urllib.parse import urlencode, urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,7 +12,10 @@ from ..models.result import SearchResult
 class MukawaScraper(BaseScraper):
     name = "mukawa-spirit"
     base_url = "https://mukawa-spirit.com/"
-    search_path = "?mode=srh&keyword="
+    search_params = {
+        "mode": "srh",
+        "cid": "",
+    }
 
     def __init__(self, session: Optional[requests.Session] = None):
         self.session = session or requests.Session()
@@ -24,7 +27,8 @@ class MukawaScraper(BaseScraper):
         )
 
     def _search_url(self, query: str) -> str:
-        return f"{self.base_url}{self.search_path}{quote(query)}"
+        params = {**self.search_params, "keyword": query}
+        return f"{self.base_url}?{urlencode(params, encoding='euc_jp')}"
 
     def _parse_price(self, text: str) -> Optional[int]:
         if not text:
