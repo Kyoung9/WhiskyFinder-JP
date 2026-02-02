@@ -131,6 +131,7 @@ requirements.txt
 - [ ] THE ULTIMATE SPIRITS
 - [ ] 洋酒専門店 千雅
 - [ ] 頃末商店
+- [ ]越後屋
 
 ---
 
