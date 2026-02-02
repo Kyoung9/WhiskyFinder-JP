@@ -32,9 +32,9 @@ def download_route():
 
     cached = get_cached_results(query)
     if cached is None:
-        return redirect(url_for("search.index", error="先に検索をしてください。"))
-
-    results = cached
+        results = search(query)
+    else:
+        results = cached
 
     output = io.StringIO()
     writer = csv.writer(output)
