@@ -1,9 +1,3 @@
 {
-  "functions": {
-    "api/index.py": {
-      "runtime": "python3.11",
-      "includeFiles": "app/**"
-    }
-  },
   "routes": [{ "src": "/(.*)", "dest": "api/index.py" }]
 }
