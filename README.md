@@ -52,6 +52,7 @@ python run.py
 - `WHISKYFINDER_BICCAMERA_PLAYWRIGHT_TIMEOUT_MS`: Playwrightタイムアウト（デフォルト: 45000）
 - `WHISKYFINDER_BICCAMERA_PLAYWRIGHT_UA`: PlaywrightのUser-Agent（任意）
 - `WHISKYFINDER_YODOBASHI_CATEGORY_URL`: ヨドバシ.comのカテゴリURL指定（任意）
+- `WHISKYFINDER_STORESJP_STORE`: STORES.jpの店舗スラッグ指定（デフォルト: absinthe）
 
 ## 検索・整形ルール
 - 検索語の空白・全角空白を正規化してキャッシュキーを生成
@@ -116,9 +117,9 @@ requirements.txt
 - [ ] 成城石井 公式オンラインショップ
 
 ### ウィスキー / 洋酒専門店
-- [x]信濃屋 公式通販ショップ
-- [x]武蔵屋 オンラインストア
-- [x]武川蒸留酒販売
+- [x]　信濃屋 公式通販ショップ
+- [x]　武蔵屋 オンラインストア
+- [x]　武川蒸留酒販売
 - [ ] ワールドリカー・ブルータス
 - [ ] 六本木鈴酒
 - [ ] リカーズハセガワ
@@ -131,6 +132,7 @@ requirements.txt
 - [ ] THE ULTIMATE SPIRITS
 - [ ] 洋酒専門店 千雅
 - [ ] 頃末商店
+- [x]　越後屋（STORES.jp）
 
 ---
 
@@ -138,7 +140,7 @@ requirements.txt
 일본 위스키 가격을 여러 쇼핑몰에서 수집해 최저가 순으로 보여주는 웹 앱입니다.
 
 - 검색 → 스크래핑 → 정렬 → CSV 다운로드
-- 현재 지원: 価格.com, 信濃屋, 武蔵屋, Mukawa Spirit, ビックカメラ, ヨドバシ.com
+- 현재 지원: 価格.com, 信濃屋, 武蔵屋, Mukawa Spirit, ビックカメラ, ヨドバシ.com, STORES.jp(越後屋)
 - `GET /search?q=...` JSON, `GET /download?q=...` CSV
 - 캐시 TTL 24시간, `total` 오름차순 정렬
 

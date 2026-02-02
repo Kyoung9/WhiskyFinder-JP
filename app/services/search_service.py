@@ -8,6 +8,7 @@ from ..scrapers.mukawa import MukawaScraper
 from ..scrapers.musashiya import MusashiyaScraper
 from ..scrapers.pricecom import PriceComScraper
 from ..scrapers.shinanoya import ShinanoyaScraper
+from ..scrapers.storesjp import StoresJPScraper
 from ..scrapers.yodobashi import YodobashiScraper
 from ..storage.cache import TTLCache
 
@@ -32,12 +33,19 @@ def _get_bool_env(name: str, default: bool) -> bool:
         return False
     return default
 
+def _get_str_env(name: str, default: str) -> str:
+    value = os.getenv(name)
+    if value is None or value == "":
+        return default
+    return value
+
 _cache = TTLCache(ttl_seconds=86400)
 _scrapers = [
     PriceComScraper(max_pages=_get_int_env("WHISKYFINDER_MAX_PAGES", 3)),
     ShinanoyaScraper(max_pages=_get_int_env("WHISKYFINDER_MAX_PAGES", 3)),
     MusashiyaScraper(),
     MukawaScraper(),
+    StoresJPScraper(store_slug=_get_str_env("WHISKYFINDER_STORESJP_STORE", "absinthe")),
     # BiccameraScraper(
     #     category=os.getenv("WHISKYFINDER_BICCAMERA_CATEGORY"),
     #     max_pages=_get_int_env("WHISKYFINDER_MAX_PAGES", 3),
